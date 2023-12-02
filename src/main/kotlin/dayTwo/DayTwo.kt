@@ -7,6 +7,10 @@ data class Game(
     val blues: MutableList<Int> = mutableListOf(),
     val greens: MutableList<Int> = mutableListOf(),
     val reds: MutableList<Int> = mutableListOf(),
+    var minGreens: Int = 1,
+    var minBlues: Int = 1,
+    var minReds: Int = 1,
+    var powerOfMinColorCounts: Int = 1,
 )
 
 class DayTwo {
@@ -39,6 +43,25 @@ class DayTwo {
         val validGames = mappedGames.filter { it.greens.max() <= maxGreen && it.blues.max() <= maxBlue && it.reds.max() <= maxRed }
         return validGames.sumOf { it.id }
     }
+
+    private fun setMinimalColorCount(game: Game): Game {
+        game.minGreens = game.greens.max()
+        game.minBlues = game.blues.max()
+        game.minReds = game.reds.max()
+        return game
+    }
+
+    private fun setPowerOfMinColorCounts(game: Game): Game {
+        game.powerOfMinColorCounts = game.minGreens * game.minBlues * game.minReds
+        return game
+    }
+
+    fun partTwo(inputs: List<String>): Int {
+        val games = inputs.map { mapGameToObject(it) }
+        games.map { setMinimalColorCount(it) }
+        games.map { setPowerOfMinColorCounts(it) }
+        return games.sumOf { it.powerOfMinColorCounts }
+    }
 }
 
 fun main() {
@@ -53,5 +76,5 @@ fun main() {
         "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
     )
     println(dayTwo.partOne(inputs))
-    // println(dayOne.partTwo(inputs))
+    println(dayTwo.partTwo(inputs))
 }
