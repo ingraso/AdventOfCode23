@@ -2,12 +2,14 @@ package dayFour
 
 import java.io.File
 import kotlin.math.pow
+import kotlin.system.measureTimeMillis
 
 data class Card(
     val id: Int,
     val winningNumbers: List<Int>,
     val obtainedNumbers: List<Int>,
     var amountOfWinningNumbers: Int = 0,
+    var copies: Int = 1,
 )
 
 class DayFour {
@@ -32,11 +34,18 @@ class DayFour {
         card.amountOfWinningNumbers = card.winningNumbers.intersect(card.obtainedNumbers.toSet()).size
     }
 
-    fun partOne(inputs: List<String>): Int {
-        val totalPoints = mutableListOf<Int>()
+    private fun initializeCardsFromInput(inputs: List<String>): List<Card> {
         val cards = inputs.map { getCard(it) }
         cards.forEach {
             setAmountOfWinningNumbers(it)
+        }
+        return cards
+    }
+
+    fun partOne(inputs: List<String>): Int {
+        val totalPoints = mutableListOf<Int>()
+        val cards = initializeCardsFromInput(inputs)
+        cards.forEach {
             totalPoints.add(
                 if (it.amountOfWinningNumbers == 1) 1 else 2F.pow(it.amountOfWinningNumbers).div(2).toInt(),
             )
@@ -44,8 +53,17 @@ class DayFour {
         return totalPoints.sumOf { it }
     }
 
+    private fun incrementCopies(card: Card, cards: List<Card>): List<Card> {
+        for (i in (card.id + 1)..(card.id + card.amountOfWinningNumbers)) {
+            cards[i - 1].copies += cards[card.id - 1].copies
+        }
+        return cards
+    }
+
     fun partTwo(inputs: List<String>): Int {
-        return 0
+        val cards = initializeCardsFromInput(inputs).toMutableList()
+        cards.forEach { incrementCopies(it, cards) }
+        return cards.sumOf { it.copies }
     }
 }
 
@@ -62,5 +80,6 @@ fun main() {
         "Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11",
     )
     println(dayFour.partOne(inputs))
-    println(dayFour.partTwo(testInput))
+    println(dayFour.partTwo(inputs))
+    println(measureTimeMillis { dayFour.partTwo(inputs) }) // 3 ms (?)
 }
