@@ -26,7 +26,7 @@ class DayThree {
         return neighbors.any { !it.isLetterOrDigit() && it != '.' }
     }
 
-    private fun findPartNumbersVerticallyOrDiagonally(inputs: List<String>): List<Int> {
+    private fun findPartNumbers(inputs: List<String>): List<Int> {
         val partNumbers = mutableListOf<Int>()
         inputs.forEach { input ->
             val lineBefore = if (input == inputs.first()) {
@@ -58,12 +58,29 @@ class DayThree {
     }
 
     fun partOne(inputs: List<String>): Int {
-        val verticalAndDiagonalPartNumbers = findPartNumbersVerticallyOrDiagonally(inputs)
-        return verticalAndDiagonalPartNumbers.sumOf { it }
+        val partNumbers = findPartNumbers(inputs)
+        return partNumbers.sumOf { it }
     }
 
     fun partTwo(inputs: List<String>): Int {
-        return 0
+        val gearRatios = listOf<Int>()
+        inputs.forEach { input ->
+            val asterixes = Regex("\\*").findAll(input).forEach { matchResult ->
+                val leftNeighborIndex = if (matchResult.range.first - 1 < 0) 0 else matchResult.range.first - 1
+                val rightNeighborIndex = if (matchResult.range.last + 1 == input.length) input.length - 1 else matchResult.range.last + 1
+                val diagonalRange = IntRange(leftNeighborIndex, rightNeighborIndex)
+                println(matchResult.range.first)
+                val adjacentPartNumbers = mutableListOf<Int>()
+                // find adjacent part numbers and append them to a list
+                // horizontal:
+            }
+        }
+        // a gear is an * that is adjacent to two part numbers (numbers)
+        // need to locate all *s and then create a list of adjacent part numbers
+        // if the list of an * is of length 2, it is a gear
+        // to find the gear ratio we need to multiply the product of the two numbers
+        // then sum up all the gear ratios
+        return gearRatios.sumOf { it }
     }
 }
 
@@ -75,5 +92,5 @@ fun main() {
         "467..114..", "...*......", "..35..633.", "......#...", "617*......", ".....+.58.", "..592.....", "......755.", "...$.*....", ".664.598..",
     )
     println(dayThree.partOne(inputs))
-    // println(dayThree.partTwo(testInput))
+    println(dayThree.partTwo(testInput))
 }
