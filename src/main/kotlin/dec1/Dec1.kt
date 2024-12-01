@@ -45,14 +45,36 @@ class Dec1 {
         return calculateTotalDifference(sortedLocationIDs)
     }
 
+    private fun countFrequencies(locationIDs: List<Int>): HashMap<Int, Int> {
+        val frequencies = HashMap<Int, Int>()
+        locationIDs.forEach { locationID ->
+            frequencies[locationID] = frequencies.getOrDefault(locationID, 0) + 1
+        }
+        return frequencies
+    }
+
+    private fun getSimilarityScore(frequenciesLeft: HashMap<Int, Int>, frequenciesRight: HashMap<Int, Int>): Int {
+        var similarityScore = 0
+        frequenciesLeft.keys.forEach { locationID ->
+            similarityScore += locationID * frequenciesLeft.getValue(locationID) * frequenciesRight.getOrDefault(locationID, 0)
+        }
+        return similarityScore
+    }
+
     fun partTwo(inputs: List<String>): Int {
-        return 1
+        // Count the number of times each number in the L list appears in the R list
+        // Multiply the number itself with its frequency
+        // Sum up all these to get the answer
+        val locationIDs = formatLocationIDsToLists(inputs)
+        val frequenciesLeft = countFrequencies(locationIDs.first)
+        val frequenciesRight = countFrequencies(locationIDs.second)
+        return getSimilarityScore(frequenciesLeft, frequenciesRight)
     }
 }
 fun main() {
     println("Today is the 1st of December!")
     val dec1 = Dec1()
     val inputs = dec1.getInput()
-    println(dec1.partOne(inputs))
-    // println(dec1.partTwo(inputs))
+    // println(dec1.partOne(inputs))
+    println(dec1.partTwo(inputs))
 }
