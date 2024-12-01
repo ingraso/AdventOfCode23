@@ -1,0 +1,14 @@
+Part 1
+We have a list of historically significant locations.
+The list contains location IDs.
+There are two groups searching the office, creating lists of location IDs.
+Pair up the numbers in the two lists, to figure out how far apart they are.
+Pair up the smallest number in list 1 with the smallest in list 2, and so on.
+Figure out the distance between the two numbers, and sum them up.
+The total distance (summed) is the answer.
+
+Part 2
+Find out how often a number from the left list appears in the right.
+Calculate a total similarity score.
+    Multiply each number in L by the times it appears in the R list.
+    Sum up all these numbers to get the answer.
