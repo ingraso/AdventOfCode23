@@ -8,3 +8,6 @@ To be safe, the levels must either increase or decrease in a report
 Additionally, any two adjacent levels must differ by at least 1 and max 3
 The answer is the amount of safe reports in the input
 
+Part Two
+The Problem Dampener tolerates a single bad level
+Meaning if only one level is disqualifying the report, it can be distinguished

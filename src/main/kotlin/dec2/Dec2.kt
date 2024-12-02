@@ -42,25 +42,59 @@ class Dec2 {
         }
     }
 
+    private fun getSafeReports(reports: List<List<Int>>): List<List<Int>> {
+        val increasingOrDecreasingReports = getIncreasingOrDecreasingReports(reports)
+        // Sort all reports to only handle decreasing ones
+        val sortedReports = sortReports(increasingOrDecreasingReports)
+        return getReportsWithinThresholds(sortedReports)
+    }
+
     fun partOne(inputs: List<String>): Int {
         // Need to check that each report is either increasing or decreasing
         // Then, check the thresholds
         val formattedInput = formatInput(inputs)
-        val increasingOrDecreasingReports = getIncreasingOrDecreasingReports(formattedInput)
-        // Sort all reports to only handle decreasing ones
-        val sortedReports = sortReports(increasingOrDecreasingReports)
-        val reportsWithinThreshold = getReportsWithinThresholds(sortedReports)
-        return reportsWithinThreshold.size
+        return getSafeReports(formattedInput).size
+    }
+
+    private fun getToleratedReports(reports: List<List<Int>>): List<List<Int>> {
+        // for each report, remove one element and check if the report is safe
+        val toleratedReports = mutableListOf<List<Int>>()
+
+        reports.forEach { report ->
+            var isTolerable = false
+            report.forEachIndexed { index, _ ->
+                val reportWithoutLevel = report.toMutableList()
+                reportWithoutLevel.removeAt(index)
+                if (getSafeReports(listOf(reportWithoutLevel)).isNotEmpty()) {
+                    isTolerable = true
+                }
+            }
+            if (isTolerable) {
+                toleratedReports.add(report)
+            }
+        }
+        return toleratedReports
     }
 
     fun partTwo(inputs: List<String>): Int {
-        return 1
+        // Of all unsafe reports, we need to check who can be re-added based on the toleration of one bad level
+        // We will force through the removal of each of the levels in the unsafe reports, adding the ones that end up being safe
+
+        val formattedInput = formatInput(inputs)
+        val safeReports = getSafeReports(formattedInput)
+        val unsafeReports = formattedInput.filter { report ->
+            !safeReports.contains(report) && !safeReports.contains(report.sortedDescending())
+        }
+
+        val toleratedReports = getToleratedReports(unsafeReports)
+        val totalSafeReports = safeReports + toleratedReports
+        return totalSafeReports.size
     }
 }
 fun main() {
     println("Today is the 2nd of December!")
     val dec2 = Dec2()
     val inputs = dec2.getInput()
-    println(dec2.partOne(inputs))
-    // println(dec1.partTwo(inputs))
+    // println(dec2.partOne(inputs))
+    println(dec2.partTwo(inputs))
 }
