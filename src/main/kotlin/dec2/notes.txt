@@ -1,0 +1,10 @@
+December 2nd
+
+Part One
+The data consists of many reports, one per line
+Each report is a list of numbers called levels, seperated by spaces
+We want to figure out which reports are safe
+To be safe, the levels must either increase or decrease in a report
+Additionally, any two adjacent levels must differ by at least 1 and max 3
+The answer is the amount of safe reports in the input
+
