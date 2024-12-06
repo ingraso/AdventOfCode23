@@ -1,0 +1,10 @@
+December 5th
+
+Part One
+The page ordering rules and the pages to produce in each update are provided
+I need to find out if an update has the pages in the right order
+An update is on the format: X,Y,Z,C,V...
+A page ordering rule is on the format A|B, meaning A must appear before B
+  This only yields if both numbers are present
+When we have found all updates in the right order, we need the middle page number
+Then we will sum all these to get the answer
